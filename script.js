@@ -1,53 +1,41 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const sections = Array.from(document.querySelectorAll(".section-content"));
-  let currentIndex = sections.findIndex((el) => el.id === "prelander");
+// flow logic script.js
 
-  if (currentIndex === -1) currentIndex = 0;
+// Selecteer alle secties die meedoen aan de flow
+const sections = [...document.querySelectorAll(".section-content")];
 
-  function showOnly(index) {
-    sections.forEach((el, i) => {
-      el.style.display = i === index ? "block" : "none";
-    });
-    button.addEventListener("click", () => {
-    console.log("Knop geklikt");
-    showNextSection();
+// Verberg alle secties behalve de eerste (bijv. prelander)
+sections.forEach((section, index) => {
+  section.style.display = index === 0 ? "block" : "none";
 });
-  }
 
-  function goToNext() {
-    let nextIndex = currentIndex + 1;
+let currentIndex = 0;
 
-    while (
-      nextIndex < sections.length &&
-      sections[nextIndex].style.display === "none"
-    ) {
-      nextIndex++;
-    }
+function showSection(index) {
+  sections.forEach((section, i) => {
+    section.style.display = i === index ? "block" : "none";
+  });
+}
 
-    if (nextIndex < sections.length) {
-      currentIndex = nextIndex;
-      showOnly(currentIndex);
-    }
-  }
+// Event listeners op buttons
+sections.forEach((section, index) => {
+  const buttons = section.querySelectorAll("button, a.go-to-next, div.go-to-next");
+  buttons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
 
-  // Init
-  showOnly(currentIndex);
+      // Als terms-sectie: check of checkbox is aangevinkt
+      const termsCheckbox = section.querySelector("input[type='checkbox']");
+      if (termsCheckbox && !termsCheckbox.checked) {
+        alert("Je moet akkoord gaan met de voorwaarden.");
+        return;
+      }
 
-  // Event listeners op buttons
-  sections.forEach((section, index) => {
-    const buttons = section.querySelectorAll("button, .go-to-next");
-    buttons.forEach((button) => {
-      button.addEventListener("click", (e) => {
-        e.preventDefault();
-        // Als terms-sectie: check of checkbox is aangevinkt
-        const termsCheckbox = section.querySelector("input[type='checkbox']");
-        if (termsCheckbox && !termsCheckbox.checked) {
-          alert("Je moet akkoord gaan met de voorwaarden.");
-          return;
-        }
-
-        goToNext();
-      });
+      // Toon volgende sectie
+      const nextIndex = currentIndex + 1;
+      if (nextIndex < sections.length) {
+        currentIndex = nextIndex;
+        showSection(currentIndex);
+      }
     });
   });
 });
