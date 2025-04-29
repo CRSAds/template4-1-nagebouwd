@@ -8,6 +8,10 @@ document.addEventListener("DOMContentLoaded", () => {
     sections.forEach((el, i) => {
       el.style.display = i === index ? "block" : "none";
     });
+    button.addEventListener("click", () => {
+    console.log("Knop geklikt");
+    showNextSection();
+});
   }
 
   function goToNext() {
