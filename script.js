@@ -12,6 +12,13 @@ function showSection(index) {
   sections.forEach((section, i) => {
     section.style.display = i === index ? "block" : "none";
   });
+
+  // Progressbar alleen tonen vanaf de 2e stap
+  const progressSection = document.getElementById("progressbar");
+  if (progressSection) {
+    progressSection.style.display = index >= 1 ? "block" : "none";
+  }
+
   updateProgress(index + 1, sections.length);
 }
 
