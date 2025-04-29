@@ -1,31 +1,65 @@
+// script.js
+
 document.addEventListener("DOMContentLoaded", () => {
+  console.info("Flow-script geladen, initialisatie gestart");
+
   const sections = Array.from(document.querySelectorAll(".section-content"));
-  const surveySections = sections.filter(section => section.id === "survey_question");
+  const surveySections = sections.filter(sec => sec.id === "survey_question");
   const shortForm = document.getElementById("short-form-1");
 
-  let current = 0;
+  let currentStep = 0;
 
-  function showSection(section) {
-    sections.forEach(s => s.style.display = "none");
-    if (section) section.style.display = "block";
-  }
-
-  function handleSurvey(sectionIndex) {
-    const answers = sectionIndex.querySelectorAll("button, a");
-    answers.forEach(btn => {
-      btn.addEventListener("click", () => {
-        current++;
-        if (surveySections[current]) {
-          showSection(surveySections[current]);
-        } else {
-          showSection(shortForm);
-        }
-      });
+  function hideAllSections() {
+    sections.forEach(section => {
+      section.style.display = "none";
     });
   }
 
-  if (surveySections.length > 0) {
-    showSection(surveySections[0]);
-    surveySections.forEach(handleSurvey);
+  function showSection(el) {
+    el.style.display = "block";
+    el.scrollIntoView({ behavior: "smooth" });
   }
+
+  function initFlow() {
+    hideAllSections();
+
+    const prelander = document.getElementById("prelander");
+    if (!prelander) {
+      console.error("Prelander sectie niet gevonden");
+      return;
+    }
+
+    showSection(prelander);
+
+    const button = prelander.querySelector("button");
+    if (!button) {
+      console.error("Button in prelander niet gevonden");
+      return;
+    }
+
+    button.addEventListener("click", () => {
+      showNextStep();
+    });
+  }
+
+  function showNextStep() {
+    hideAllSections();
+
+    if (currentStep < surveySections.length) {
+      showSection(surveySections[currentStep]);
+      setupSurveyButtons(surveySections[currentStep]);
+      currentStep++;
+    } else {
+      showSection(shortForm);
+    }
+  }
+
+  function setupSurveyButtons(section) {
+    const buttons = section.querySelectorAll("button");
+    buttons.forEach(btn => {
+      btn.addEventListener("click", showNextStep);
+    });
+  }
+
+  initFlow();
 });
