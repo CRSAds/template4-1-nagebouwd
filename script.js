@@ -1,34 +1,49 @@
 document.addEventListener("DOMContentLoaded", () => {
   const sections = Array.from(document.querySelectorAll(".section-content"));
-  if (sections.length === 0) return;
+  let currentIndex = sections.findIndex((el) => el.id === "prelander");
 
-  let currentIndex = sections.findIndex((s) => s.id === "prelander");
   if (currentIndex === -1) currentIndex = 0;
 
-  function showSection(index) {
-    sections.forEach((section, i) => {
-      section.style.display = i === index ? "block" : "none";
+  function showOnly(index) {
+    sections.forEach((el, i) => {
+      el.style.display = i === index ? "block" : "none";
     });
   }
 
-  function goToNextSection() {
-    if (currentIndex < sections.length - 1) {
-      currentIndex++;
-      showSection(currentIndex);
+  function goToNext() {
+    let nextIndex = currentIndex + 1;
+
+    while (
+      nextIndex < sections.length &&
+      sections[nextIndex].style.display === "none"
+    ) {
+      nextIndex++;
+    }
+
+    if (nextIndex < sections.length) {
+      currentIndex = nextIndex;
+      showOnly(currentIndex);
     }
   }
 
-  // Init: toon alleen de eerste
-  showSection(currentIndex);
+  // Init
+  showOnly(currentIndex);
 
-  // Zet eventListeners op buttons in elke sectie
-  sections.forEach((section) => {
-    const button = section.querySelector("button");
-    if (button) {
+  // Event listeners op buttons
+  sections.forEach((section, index) => {
+    const buttons = section.querySelectorAll("button");
+    buttons.forEach((button) => {
       button.addEventListener("click", (e) => {
         e.preventDefault();
-        goToNextSection();
+        // Als terms-sectie: check of checkbox is aangevinkt
+        const termsCheckbox = section.querySelector("input[type='checkbox']");
+        if (termsCheckbox && !termsCheckbox.checked) {
+          alert("Je moet akkoord gaan met de voorwaarden.");
+          return;
+        }
+
+        goToNext();
       });
-    }
+    });
   });
 });
