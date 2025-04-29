@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Event listeners op buttons
   sections.forEach((section, index) => {
-    const buttons = section.querySelectorAll("button, a.tatsu-shortcode-button");
+    const buttons = section.querySelectorAll("button, a[class*='button'], .go-to-next");
     buttons.forEach((button) => {
       button.addEventListener("click", (e) => {
         e.preventDefault();
