@@ -1,39 +1,46 @@
-// flow logic script.js
+// === CONFIG ===
+const sectionSelector = ".section-content";
+const progressFillId = "progress-fill";
 
-// Selecteer alle secties die meedoen aan de flow
-const sections = [...document.querySelectorAll(".section-content")];
-
-// Verberg alle secties behalve de eerste (bijv. prelander)
-sections.forEach((section, index) => {
-  section.style.display = index === 0 ? "block" : "none";
-});
-
+// === FLOW ===
+const sections = [...document.querySelectorAll(sectionSelector)].filter(
+  (el) => getComputedStyle(el).display !== "none"
+);
 let currentIndex = 0;
 
 function showSection(index) {
   sections.forEach((section, i) => {
     section.style.display = i === index ? "block" : "none";
   });
+  updateProgress(index + 1, sections.length);
 }
 
-// Event listeners op buttons
+function updateProgress(current, total) {
+  const progress = Math.round((current / total) * 100);
+  const fill = document.getElementById(progressFillId);
+  if (fill) fill.style.width = `${progress}%`;
+}
+
+// Initial setup
+showSection(currentIndex);
+
+// === BUTTON LOGIC ===
 sections.forEach((section, index) => {
-  const buttons = section.querySelectorAll("button, a.go-to-next, div.go-to-next");
+  const buttons = section.querySelectorAll("button, .go-to-next");
   buttons.forEach((button) => {
     button.addEventListener("click", (e) => {
       e.preventDefault();
 
-      // Als terms-sectie: check of checkbox is aangevinkt
+      // Terms-checkbox check
       const termsCheckbox = section.querySelector("input[type='checkbox']");
       if (termsCheckbox && !termsCheckbox.checked) {
         alert("Je moet akkoord gaan met de voorwaarden.");
         return;
       }
 
-      // Toon volgende sectie
-      const nextIndex = currentIndex + 1;
-      if (nextIndex < sections.length) {
-        currentIndex = nextIndex;
+      // Volgende sectie tonen
+      if (index + 1 < sections.length) {
+        currentIndex = index + 1;
         showSection(currentIndex);
       }
     });
