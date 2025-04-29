@@ -4,7 +4,7 @@ const progressFillId = "progress-fill";
 
 // === FLOW ===
 const sections = [...document.querySelectorAll(sectionSelector)].filter(
-  (el) => getComputedStyle(el).display !== "none"
+  (el) => el.id !== "progressbar"
 );
 let currentIndex = 0;
 
