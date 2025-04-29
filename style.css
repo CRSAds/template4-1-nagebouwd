@@ -1,3 +1,28 @@
 .section-content {
   display: none;
 }
+.progress-container {
+  width: 100%;
+  background: transparent;
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.progress {
+  width: 90%;
+  height: 24px;
+  margin: 0 auto;
+  background: #eee;
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, #ff416c, #ffba00);
+  transition: width 0.3s ease;
+}
