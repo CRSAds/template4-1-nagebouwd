@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Event listeners op buttons
   sections.forEach((section, index) => {
-    const buttons = section.querySelectorAll("button");
+    const buttons = section.querySelectorAll("button, .sp-button, a.button");
     buttons.forEach((button) => {
       button.addEventListener("click", (e) => {
         e.preventDefault();
